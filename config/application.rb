@@ -24,6 +24,7 @@ module Primero; end
 # Main Rails application class for Primero
 class Primero::Application < Rails::Application
   config.load_defaults 6.1
+  config.active_record.yaml_column_permitted_classes = [Symbol, Date, Time]
 
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers

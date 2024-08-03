@@ -78,7 +78,7 @@ group :development, :test do
   gem 'rspec-rails',                '~> 6.0'
   gem 'rubocop',                    '~> 1.54'
   gem 'rubocop-performance',        '~> 1.18'
-  gem 'ruby-prof',                  '~> 0.17'
+  gem 'ruby-prof',                  '~> 1.7'
   gem 'simplecov',                  '~> 0.18'
   # TODO: Latest version (1.2.5) of this conflicts with sunspot gem. Upgrade when we upgrade sunspot
   gem 'sunspot_test',               '~> 0.4', require: false

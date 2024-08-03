@@ -7,7 +7,7 @@ FROM ${BUILD_REGISTRY}ruby:3.2.3-alpine3.19 AS build-env
 ENV BUILD_PACKAGES bash curl wget curl-dev build-base git
 ENV PYTHON_PACKAGES python3 py3-pip
 ENV BUILD_DEP_PACKAGES postgresql-dev
-ENV RUNTIME_PACKAGES libc6-compat nodejs gettext libintl npm imagemagick libsodium-dev
+ENV RUNTIME_PACKAGES libc6-compat nodejs gettext libintl npm imagemagick libsodium-dev gcompat
 ENV DEV_PACKAGES busybox-extras tree cairo pixman pixman-dev
 ENV RAILS_ENV production
 ENV PYTHON /usr/bin/python
@@ -28,9 +28,9 @@ ENV DEVISE_JWT_SECRET_KEY=DEVISE_JWT_SECRET_KEY
 # otherwise return 1 and stop docker build
 RUN set -ex ; \
         test -n "$APP_ROOT" || (printf "APP_ROOT not defined\n" ; \
-            return 1); \
+        return 1); \
         test -n "$RAILS_LOG_PATH" || (printf "RAILS_LOG_PATH not defined\n" ; \
-            return 1);
+        return 1);
 
 # Install our packages
 RUN set -euox pipefail \
@@ -50,12 +50,13 @@ COPY [ "Gemfile", "Gemfile.lock", "$APP_ROOT/" ]
 
 # Run bundle install
 RUN set -euox pipefail \
+        ; bundle lock --add-platform x86_64-linux \
         ; if [ $RAILS_ENV == "production" ]; \
         then \
         bundle install --without development test \
         ; else \
         bundle install \
-        ; fi
+        ; fi 
 
 # Note: Deleting the Solr dev server is not strictly necessary since we don't run it
 # but its java packages are riddled with vulnerabilities that set off static security scans.
